@@ -2,12 +2,13 @@
 const express = require("express");
 const server = express();
 const fetch = require("node-fetch");
+const key = require("./private.js");
 
 // value for the API request:
 let requestUrl = "https://bustime.mta.info/api/siri/stop-monitoring.json";
 // and the query string:
 let myQuery = {
-  key: '019d0445-37d4-4549-8714-47c3e5ea9ba7',
+  key: key,
   OperatorRef: 'MTA',
   MonitoringRef: '305103'
 };
@@ -54,35 +55,23 @@ function handleGet(request, response) {
       }
 
       // if there is an error instead of a response:
-    if (!result.Siri 
-        || !result.Siri.ServiceDelivery 
-        || !result.Siri.ServiceDelivery.StopMonitoringDelivery
-        || !result.Siri.ServiceDelivery.StopMonitoringDelivery[0]) {
-        response.end("ERROR");
-        console.log(JSON.stringify(result))
+    if (!result.Siri) {
+        response.end(JSON.stringify(result));
+        console.log(JSON.stringify(result));
         return;
     }
     
     let data = result.Siri.ServiceDelivery.StopMonitoringDelivery[0].MonitoredStopVisit;
-    //console.log(data);
-    response.end(JSON.stringify(data));
-    // let stopData;
+    let dataToReturn = [];
+    let stops;
 
-    for (let i = 0; i < data.length(); i++){
-        console.log(d[i]);
+    for (let i = 0; i < data.length; i++) {
+      stops = data[i].MonitoredVehicleJourney.MonitoredCall.Extensions.Distances.StopsFromCall;
+      dataToReturn[i] = {stopsFromCall: stops};
     }
 
-    // console.log(data);
-    //   // if there's a successful result from the remote API:
-    //   response.end("Hello");
-      //let myData = result.data[0];
-    //   let dataToReturn = {};
-    //   // get just the time and the water level:
-    //   dataToReturn.time = myData.t;
-    //   dataToReturn.waterLevel = myData.v;
-    //   // send this in response to the original request:
-    //   //response.json(dataToReturn);
-    //   response.end(JSON.stringify(data))
+    console.log(JSON.stringify(dataToReturn));
+    response.end(JSON.stringify(dataToReturn));
   }
 }
 
