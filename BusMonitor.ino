@@ -13,7 +13,7 @@ const String MON_REF = "305103";
 
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 
-const char serverAddress[] = "http://bustime.mta.info/api/siri/stop-monitoring.json";
+const char serverAddress[] = "bustime.mta.info/api/siri/stop-monitoring.json";
 
 WiFiClient wifi;
 HttpClient client = HttpClient(wifi, serverAddress);
