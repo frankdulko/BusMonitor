@@ -13,13 +13,15 @@ const String MON_REF = "305103";
 
 Adafruit_NeoPixel strip(LED_COUNT, LED_PIN, NEO_GRBW + NEO_KHZ800);
 
-const char serverAddress[] = "bustime.mta.info/api/siri/stop-monitoring.json";
+const char serverAddress[] = "10.18.201.170:8080";
+//const char serverAddress[] = "arduino-to-json.glitch.me";
+int port = 443;
 
-WiFiClient wifi;
-HttpClient client = HttpClient(wifi, serverAddress);
+WiFiSSLClient wifi;
+HttpClient client = HttpClient(wifi, serverAddress, port);
 
 long lastRequest = 0;
-int interval = 5000;
+int interval = 10000;
 
 void setup() {
   Serial.begin(9600);
@@ -60,7 +62,9 @@ void loop() {
 }
 
 void sendRequest(){
-  String path = "?key=" + KEY + "&OperatorRef=" + OP_REF + "&MonitoringRef=" + MON_REF;
+  
+  String path = "/";
+  //String path = "/data/";
 
   // send the GET request
     Serial.println("making GET request");

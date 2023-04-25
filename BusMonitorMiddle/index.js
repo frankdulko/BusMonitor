@@ -67,9 +67,9 @@ function handleGet(request, response) {
 
     for (let i = 0; i < data.length; i++) {
       stops = data[i].MonitoredVehicleJourney.MonitoredCall.Extensions.Distances.StopsFromCall;
-      dataToReturn[i] = {stopsFromCall: stops};
+      dataToReturn[i] = stops;
     }
-
+    
     console.log(JSON.stringify(dataToReturn));
     response.end(JSON.stringify(dataToReturn));
   }
